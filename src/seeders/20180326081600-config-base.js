@@ -12,18 +12,10 @@ const admin = {
 
 const nameModels = [
   { en: 'account', fr: 'un compte' },
-  { en: 'building', fr: 'un batiment' },
-  { en: 'level', fr: 'un niveau' },
-  { en: 'offer', fr: 'une offre' },
-  { en: 'organization', fr: 'une organisation' },
   { en: 'permission', fr: 'une permission' },
-  { en: 'person', fr: 'une personne' },
-  { en: 'postalAddress', fr: 'une adresse postale' },
   { en: 'role', fr: 'un role' },
-  { en: 'service', fr: 'un service' },
-  { en: 'action', fr: 'une intervention' },
-  { en: 'planAction', fr: 'une plannification d\'intervention' },
-  { en: 'locationAction', fr: 'un lieu d\'intervention' }
+  { en: 'shoppingList', fr: 'une liste de course' },
+  { en: 'item', fr: 'un element dans la liste de course' },
 ];
 
 const actions = [
