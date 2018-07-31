@@ -8,7 +8,12 @@ const resolvers = {
   Query: {
     shoppingListById: combineResolvers(
       can('shoppingList:read'),
-      (_, { uuid }) => models.shoppingList.findById(uuid, itemOptions)
+      (_, { uuid }) => models.shoppingList.findById(uuid, {
+        include: {
+          model: models.item,
+          as: 'items'
+        }
+      })
     ),
     shoppingLists: combineResolvers(
       can('shoppingList:read'),
@@ -44,7 +49,7 @@ const resolvers = {
       }
     ),
     shoppingListAddItem: combineResolvers(
-      can('shoppingList:addItem'),
+      can('shoppingList:add'),
       async (_, { listUuid, input }) => {
         const list = await models.shoppingList.findById(listUuid)
         if (!list) return Promise.reject(new Error("Unknown shoppingList"))
@@ -86,7 +91,7 @@ const resolvers = {
   },
   ShoppingList: {
     items: combineResolvers(
-      can('items:read'),
+      can('item:read'),
       (shoppingList) => {
         return shoppingList.getItems( {
           through: {items: "quantity"}
