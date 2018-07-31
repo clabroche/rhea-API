@@ -6,8 +6,8 @@ API GraphQL for rhéa app
 
 ## Install
 ```
-git clone https://github.com/clabroche/Rhéa-API.git
-cd Rhéa-API
+git clone https://github.com/clabroche/rhea-API.git
+cd rhea-API
 npm install
 ```
 
