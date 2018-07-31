@@ -8,6 +8,7 @@ type ShoppingList {
     uuid: ID!
     name: String
     description: String
+    createdAt: GraphQLDateTime
     items: [ItemInList]
 }
 
