@@ -60,8 +60,7 @@ const resolvers = {
           })
         })
         if (!item) return new Error("Can't add item")
-        console.log(input.quantity, input.done)
-        if (!input.done) input.done = input.quantity
+        if (!input.done) input.done = 0
         if (input.done > input.quantity) input.done = 0
         if (input.done < 0) input.done = 0
         if (input.quantity < 0) input.quantity = 0
@@ -77,7 +76,7 @@ const resolvers = {
       }
     ),
     shoppingListRemoveItem: combineResolvers(
-      can('shoppingList:addItem'),
+      can('shoppingList:remove'),
       async (_, { listUuid, itemUuid }) => {
         const list = await models.shoppingList.findById(listUuid, {
           include: {
@@ -87,7 +86,7 @@ const resolvers = {
         })
         if (!list) return Promise.reject(new Error("Unknown shoppingList"))
         list.removeItem(itemUuid)
-        return models.shoppingList.findById(listUuid)
+        return true
       }
     ),
     shoppingListDelete: combineResolvers(

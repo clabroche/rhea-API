@@ -23,7 +23,8 @@ const actions = [
   { en: 'read', fr: 'lire' },
   { en: 'update', fr: 'modifier' },
   { en: 'delete', fr: 'supprimer' },
-  { en: 'add', fr: 'ajouter' }
+  { en: 'add', fr: 'ajouter' },
+  { en: 'remove', fr: 'enlever' }
 ];
 
 const allPermissions = nameModels.map(nameModel => {

@@ -40,7 +40,7 @@ extend type Query {
 extend type Mutation {
     shoppingListCreate(input: InputShoppingList!): ShoppingList
     shoppingListUpdate(uuid: ID!, input: InputShoppingList!): ShoppingList
-    shoppingListRemoveItem(listUuid: ID!, itemUuid: ID!): ShoppingList
+    shoppingListRemoveItem(listUuid: ID!, itemUuid: ID!): Boolean
     shoppingListAddItem(listUuid: ID!, input: InputItemInList!): ItemInList
     shoppingListDelete(uuid: ID!): Boolean
 }
