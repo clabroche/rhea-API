@@ -1,7 +1,7 @@
 {
-  "name": "hygisoft-web-api",
+  "name": "rhea-api",
   "version": "0.0.22",
-  "description": "API Hygisoft WEB",
+  "description": "Rhéa API",
   "dependencies": {
     "apollo-server-express": "^1.4.0",
     "argon2": "^0.19.3",
@@ -21,8 +21,6 @@
     "mysql2": "^1.5.3",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0",
-    "sequelize": "^4.38.0",
     "sequelize-cli": "^4.0.0",
     "sqlite3": "^4.0.2"
   },

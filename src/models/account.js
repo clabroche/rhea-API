@@ -11,13 +11,14 @@ module.exports = (sequelize, DataTypes) => {
       unique: true
     },
     password: DataTypes.STRING,
+    givenName: DataTypes.STRING,
+    familyName: DataTypes.STRING,
     avatar: DataTypes.STRING,
     // Timestamps for migrations
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE
   }, { freezeTableName: true });
   account.associate = function (models) {
-    this.hasOne(models.person);
     this.belongsTo(models.role);
   };
 

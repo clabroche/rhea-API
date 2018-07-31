@@ -1,32 +1,13 @@
 'use strict';
 
 const Promise = require('bluebird');
-const faker = require('faker');
 const models = require('../models');
 
-const organization = {
-  name: 'John DOE Compagny',
-  logo: faker.system.filePath(),
-  entity: {
-    telephone: faker.phone.phoneNumber(),
-    email: 'johndoe@compagny.fr',
-    type: 'vendor'
-  }
-};
-
 const admin = {
+  login: 'johndoe',
   givenName: 'John',
   familyName: 'DOE',
-  gender: (Math.floor(Math.random() * 10) % 2) ? 'F' : 'M',
-  account: {
-    login: 'johndoe',
-    password: '$argon2i$v=19$m=4096,t=3,p=1$CxnnerAwIpnDdqI6bAjG9w$keNau2CHhpwjs54E3fxu6t5jR0DwMeHTw4SY/Em0hWc'
-  },
-  entity: {
-    telephone: faker.phone.phoneNumber(),
-    email: faker.internet.email(),
-    type: 'vendor'
-  }
+  password: '$argon2i$v=19$m=4096,t=3,p=1$CxnnerAwIpnDdqI6bAjG9w$keNau2CHhpwjs54E3fxu6t5jR0DwMeHTw4SY/Em0hWc'
 };
 
 const nameModels = [
@@ -56,7 +37,7 @@ const allPermissions = nameModels.map(nameModel => {
   return actions.map(action => {
     return {
       name: `${nameModel.en}:${action.en}`,
-      description: `permet de ${action.fr} ${nameModel.fr}`
+      description: `Permet de ${action.fr} ${nameModel.fr}`
     };
   });
 }).reduce((a, b) => a.concat(b), []);
@@ -71,12 +52,9 @@ module.exports = {
     return models.sequelize.sync().then(() => {
       return Promise.join(
         models.role.create(adminRole, { include: [models.permission] }),
-        models.person.create(admin, { include: [models.entity, models.account] }),
-        models.organization.create(organization, { include: [models.entity] }),
-        function (role, admin, organization) {
-          return admin.account.setRole(role).then(() => {
-            return organization.addPerson(admin);
-          });
+        models.account.create(admin),
+        function (role, admin) {
+          return admin.setRole(role)
         }
       );
     });

@@ -1,24 +1,25 @@
-module.exports = () => [account, role, person, base];
+module.exports = () => [account, role, base];
 
-const base = require('./base');
-const person = require('./person');
 const role = require('./role');
+const base = require('./base');
 
 const account = `
 type Account {
     uuid: ID!
     login: String
     password: String
+    givenName: String
+    familyName: String
     avatar: String
-    user: Person
     role: Role
 }
 
 input InputAccount {
     login: String
     password: String
+    givenName: String
+    familyName: String
     avatar: String
-    user: InputPerson
     roleUuid: ID
 }
 

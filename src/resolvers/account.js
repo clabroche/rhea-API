@@ -26,24 +26,17 @@ const resolvers = {
             return input;
           });
         }).then(input => {
-          if (!input.user) return models.account.create(input).then((account) => ({ input, account }));
-          return Promise.join(
-            models.account.create(input),
-            models.person.createWithEntity(input.user),
-            (account, person) => account.setPerson(person).then(() => ({ input, account }))
-          );
+          return models.account.create(input).then((account) => ({ input, account })).catch(err=>{
+            if (err.name === 'SequelizeUniqueConstraintError') return Promise.reject(new Error('Login exist'))
+            return Promise.reject(err)
+          });
         }).then(({ input, account }) => {
           if (!input.roleUuid) return account;
           return models.role.findById(input.roleUuid)
             .then(role => account.setRole(role))
             .then(() => account);
         }).then(account => {
-          return models.account.findById(account.uuid, {
-            include: [models.role, {
-              model: models.person,
-              include: [models.entity]
-            }]
-          });
+          return models.account.findById(account.uuid);
         });
       }
     ),
@@ -51,10 +44,7 @@ const resolvers = {
       can('account:update'),
       (_, { uuid, input }) => {
         return models.account.findById(uuid, {
-          include: [models.role, {
-            model: models.person,
-            include: [models.entity]
-          }]
+          include: [models.role]
         }).then(account => {
           if (!input.password) return { input, account };
           return argon2.hash(input.password).then(hash => {
@@ -62,10 +52,7 @@ const resolvers = {
             return { input, account };
           });
         }).then(({ input, account }) => {
-          if (!input.user) return account.update(input).then(account => ({ input, account }));
-          return account.update(input)
-            .then(account => account.person.updateWithEntity(input.user))
-            .then(() => ({ input, account }));
+          return account.update(input).then(account => ({ input, account }));
         }).then(({ input, account }) => {
           if (!input.roleUuid) return account;
           return models.role.findById(input.roleUuid)
@@ -73,10 +60,7 @@ const resolvers = {
             .then(() => account);
         }).then(account => {
           return models.account.findById(account.uuid, {
-            include: [models.role, {
-              model: models.person,
-              include: [models.entity]
-            }]
+            include: [models.role]
           });
         });
       }
@@ -85,16 +69,11 @@ const resolvers = {
       can('account:delete'),
       (_, { uuid }) => {
         return models.account.findById(uuid, {
-          include: [models.role, {
-            model: models.person,
-            include: [models.entity]
-          }]
+          include: [models.role]
         }).then(account => {
           if (!account) return Promise.reject(new Error('unknown uuid'));
           return Promise.join(
             account.destroy(),
-            account.person.destroy(),
-            account.person.entity.destroy(),
             () => Promise.resolve(true)
           );
         });
@@ -102,16 +81,6 @@ const resolvers = {
     )
   },
   Account: {
-    user: combineResolvers(
-      can('person:read'),
-      (account) => {
-        return account.getPerson().then((person) => {
-          return models.person.findById(person.uuid, {
-            include: [models.entity]
-          });
-        });
-      }
-    ),
     role: combineResolvers(
       can('role:read'),
       (account) => account.getRole()

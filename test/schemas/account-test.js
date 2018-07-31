@@ -20,10 +20,6 @@ describe('src/schemas/account.js', function () {
         login
         password
         avatar
-        user {
-          uuid
-          givenName
-        }
         role {
           uuid
           name
@@ -40,7 +36,6 @@ describe('src/schemas/account.js', function () {
           'login',
           'password',
           'avatar',
-          'user',
           'role'
         );
         expect(account).to.be.an('object');
@@ -48,7 +43,6 @@ describe('src/schemas/account.js', function () {
         expect(account.login).to.be.a('string');
         expect(account.password).to.be.a('string');
         expect(account.avatar).to.be.a('string');
-        expect(account.user).to.be.an('object');
         expect(account.role).to.be.an('object');
       });
     });
@@ -61,10 +55,6 @@ describe('src/schemas/account.js', function () {
         login
         password
         avatar
-        user {
-          uuid
-          givenName
-        }
         role {
           uuid
           name
@@ -81,7 +71,6 @@ describe('src/schemas/account.js', function () {
         'login',
         'password',
         'avatar',
-        'user',
         'role'
       );
       expect(account).to.be.an('object');
@@ -89,7 +78,6 @@ describe('src/schemas/account.js', function () {
       expect(account.login).to.be.a('string');
       expect(account.password).to.be.a('string');
       expect(account.avatar).to.be.a('string');
-      expect(account.user).to.be.an('object');
       expect(account.role).to.be.an('object');
     });
   });

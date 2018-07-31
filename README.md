@@ -1,13 +1,13 @@
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/Flet/semistandard)
 
-# Hygisoft-web-API
+# Rhéa API
 
-API GraphQL de Hygisoft version web
+API GraphQL for rhéa app
 
 ## Install
 ```
-git clone https://github.com/defi-informatique-team/Hygisoft-web-API.git
-cd Hygisoft-web-API
+git clone https://github.com/clabroche/Rhéa-API.git
+cd Rhéa-API
 npm install
 ```
 
