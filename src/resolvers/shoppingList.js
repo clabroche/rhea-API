@@ -71,7 +71,9 @@ const resolvers = {
             done: input.done
          }
         })
-        return models.shoppingList.findById(listUuid)
+        return models.shoppingListItem.find({
+          where: { itemUuid: item.uuid },
+        })
       }
     ),
     shoppingListRemoveItem: combineResolvers(
