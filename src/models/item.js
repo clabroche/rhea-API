@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: DataTypes.DATE
   }, { freezeTableName: true });
   item.associate = function (models) {
-    this.belongsToMany(models.shoppingList, { through: 'shoppingList_item' });
+    this.belongsToMany(models.shoppingList, { through: models.shoppingListItem, as: 'shoppingLists'});
   };
 
   return item;

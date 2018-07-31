@@ -8,13 +8,25 @@ type ShoppingList {
     uuid: ID!
     name: String
     description: String
-    items: [Item]
+    items: [ItemInList]
+}
+
+type ItemInList {
+    uuid: ID!
+    name: String
+    description: String
+    quantity: Int
+}
+input InputItemInList {
+    name: String
+    description: String
+    quantity: Int
 }
 
 input InputShoppingList {
     name: String
     description: String
-    itemUuids: [ID]
+    items: [ID]
 }
 
 extend type Query {
@@ -25,6 +37,8 @@ extend type Query {
 extend type Mutation {
     shoppingListCreate(input: InputShoppingList!): ShoppingList
     shoppingListUpdate(uuid: ID!, input: InputShoppingList!): ShoppingList
+    shoppingListRemoveItem(listUuid: ID!, itemUuid: ID!): ShoppingList
+    shoppingListAddItem(listUuid: ID!, input: InputItemInList!): ShoppingList
     shoppingListDelete(uuid: ID!): Boolean
 }
 `;

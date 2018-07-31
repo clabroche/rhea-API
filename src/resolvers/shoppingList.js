@@ -8,9 +8,7 @@ const resolvers = {
   Query: {
     shoppingListById: combineResolvers(
       can('shoppingList:read'),
-      (_, { uuid }) => models.shoppingList.findById(uuid, {
-        include: [models.item]
-      })
+      (_, { uuid }) => models.shoppingList.findById(uuid, itemOptions)
     ),
     shoppingLists: combineResolvers(
       can('shoppingList:read'),
@@ -29,6 +27,7 @@ const resolvers = {
             [Op.or]: input.itemUuids.map(itemUuid => ({ uuid: itemUuid }))
           }
         }).then(items => {
+          console.log(models.shoppingListItem)
           return shoppingList.setItems(items);
         }).then(() => models.shoppingList.findById(shoppingList.uuid, {
           include: [models.item]
@@ -44,6 +43,38 @@ const resolvers = {
         return models.shoppingList.findById(uuid);
       }
     ),
+    shoppingListAddItem: combineResolvers(
+      can('shoppingList:addItem'),
+      async (_, { listUuid, input }) => {
+        const list = await models.shoppingList.findById(listUuid)
+        if (!list) return Promise.reject(new Error("Unknown shoppingList"))
+        let item;
+        item = await models.item.create(input).catch(async err => {
+          return await models.item.find({
+            where: { name: input.name },
+          })
+        })
+        if (!item) return new Error("Can't add item")
+        await list.addItems([item], {
+          through: { quantity: input.quantity }
+        })
+        return models.shoppingList.findById(listUuid)
+      }
+    ),
+    shoppingListRemoveItem: combineResolvers(
+      can('shoppingList:addItem'),
+      async (_, { listUuid, itemUuid }) => {
+        const list = await models.shoppingList.findById(listUuid, {
+          include: {
+            model: models.item,
+            as: "items"
+          }
+        })
+        if (!list) return Promise.reject(new Error("Unknown shoppingList"))
+        list.removeItem(itemUuid)
+        return models.shoppingList.findById(listUuid)
+      }
+    ),
     shoppingListDelete: combineResolvers(
       can('shoppingList:delete'),
       async (_, { uuid }) => {
@@ -56,7 +87,16 @@ const resolvers = {
   ShoppingList: {
     items: combineResolvers(
       can('items:read'),
-      (shoppingList) => shoppingList.getItems()
+      (shoppingList) => {
+        return shoppingList.getItems( {
+          through: {items: "quantity"}
+        }).then(data => {
+          const a = data.map(({ shoppingListItem }, i)=>{
+            data[i].quantity = shoppingListItem.quantity
+          })
+          return data
+        })
+      }
     )
   }
 };
