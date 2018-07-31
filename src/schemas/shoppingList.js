@@ -17,11 +17,13 @@ type ItemInList {
     name: String
     description: String
     quantity: Int
+    done: Int
 }
 input InputItemInList {
     name: String
     description: String
     quantity: Int
+    done: Int
 }
 
 input InputShoppingList {

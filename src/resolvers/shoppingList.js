@@ -60,8 +60,16 @@ const resolvers = {
           })
         })
         if (!item) return new Error("Can't add item")
+        console.log(input.quantity, input.done)
+        if (!input.done) input.done = input.quantity
+        if (input.done > input.quantity) input.done = 0
+        if (input.done < 0) input.done = 0
+        if (input.quantity < 0) input.quantity = 0
         await list.addItems([item], {
-          through: { quantity: input.quantity }
+          through: {
+            quantity: input.quantity,
+            done: input.done
+         }
         })
         return models.shoppingList.findById(listUuid)
       }
@@ -96,8 +104,9 @@ const resolvers = {
         return shoppingList.getItems( {
           through: {items: "quantity"}
         }).then(data => {
-          const a = data.map(({ shoppingListItem }, i)=>{
+          data.map(({ shoppingListItem }, i)=>{
             data[i].quantity = shoppingListItem.quantity
+            data[i].done = shoppingListItem.done
           })
           return data
         })
