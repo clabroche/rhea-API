@@ -64,12 +64,12 @@ const resolvers = {
         if (input.done > input.quantity) input.done = 0
         if (input.done < 0) input.done = 0
         if (input.quantity < 0) input.quantity = 0
-        const a = await list.addItems([item], {
+        await list.addItems([item], {
           through: {
             quantity: input.quantity,
             done: input.done
          }
-        })
+        });
 
         return models.shoppingListItem.find({
           where: { itemUuid: item.uuid },
