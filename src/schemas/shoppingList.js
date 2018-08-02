@@ -18,12 +18,14 @@ type ItemInList {
     description: String
     quantity: Int
     done: Int
+    price: Float
 }
 input InputItemInList {
     name: String
     description: String
     quantity: Int
     done: Int
+    price: Float
 }
 
 input InputShoppingList {

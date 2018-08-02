@@ -67,7 +67,8 @@ const resolvers = {
         await list.addItems([item], {
           through: {
             quantity: input.quantity,
-            done: input.done
+            done: input.done,
+            price: input.price
          }
         });
 
@@ -112,6 +113,7 @@ const resolvers = {
           data.map(({ shoppingListItem }, i)=>{
             data[i].quantity = shoppingListItem.quantity
             data[i].done = shoppingListItem.done
+            data[i].price = shoppingListItem.price
           })
           return data
         })
