@@ -32,7 +32,6 @@ const resolvers = {
             [Op.or]: input.itemUuids.map(itemUuid => ({ uuid: itemUuid }))
           }
         }).then(items => {
-          console.log(models.shoppingListItem)
           return shoppingList.setItems(items);
         }).then(() => models.shoppingList.findById(shoppingList.uuid, {
           include: [models.item]
@@ -55,9 +54,10 @@ const resolvers = {
         if (!list) return Promise.reject(new Error("Unknown shoppingList"))
         let item;
         item = await models.item.create(input).catch(async err => {
-          return await models.item.find({
+          let item = await models.item.find({
             where: { name: input.name },
           })
+          return item.update(input);
         })
         if (!item) return new Error("Can't add item")
         if (!input.done) input.done = 0
@@ -70,6 +70,7 @@ const resolvers = {
             done: input.done
          }
         })
+
         return models.shoppingListItem.find({
           where: { itemUuid: item.uuid },
         }).then(data => {
