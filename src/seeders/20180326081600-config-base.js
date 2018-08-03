@@ -15,7 +15,8 @@ const nameModels = [
   { en: 'permission', fr: 'une permission' },
   { en: 'role', fr: 'un role' },
   { en: 'shoppingList', fr: 'une liste de course' },
-  { en: 'item', fr: 'un element dans la liste de course' },
+  { en: 'item', fr: 'un element' },
+  { en: 'category', fr: 'une catégorie' },
 ];
 
 const actions = [
