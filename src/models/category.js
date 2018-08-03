@@ -6,7 +6,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true
     },
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      unique: true
+    },
     // Timestamps for migrations
     updatedAt: DataTypes.DATE,
     createdAt: DataTypes.DATE,

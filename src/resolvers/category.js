@@ -16,8 +16,28 @@ const resolvers = {
   Mutation: {
     categoryCreate: combineResolvers(
       can('role:create'),
-      (_, { input }) => {
-        return models.category.create(input)
+      async (_, { input }) => {
+        const existingCategory = (await models.category.findAll({
+          where: { name: input.name }
+        })).pop();
+        if (existingCategory) return existingCategory;
+        const category = await models.category.create(input);
+        return models.category.findById(category.uuid);
+      }
+    ),
+    categoryUpdate: combineResolvers(
+      can('role:update'),
+      async (_, { uuid, input }) => {
+        await models.category.update(input, {where: { uuid }});
+        return models.category.findById(uuid)
+      }
+    ),
+    categoryDelete: combineResolvers(
+      can('role:delete'),
+      async (_, { uuid }) => {
+        const category = await models.category.findById(uuid)
+        if (!category) return Promise.reject(new Error('Unknown uuid'));
+        return category.destroy();
       }
     )
   }
