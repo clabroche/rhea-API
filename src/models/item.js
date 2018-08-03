@@ -11,9 +11,13 @@ module.exports = (sequelize, DataTypes) => {
       unique: true
     },
     description: DataTypes.STRING,
+    price: {
+      type: DataTypes.FLOAT, 
+      defaultValue: 0,
+    },
     // Timestamps for migrations
+    updatedAt: DataTypes.DATE,
     createdAt: DataTypes.DATE,
-    updatedAt: DataTypes.DATE
   }, { freezeTableName: true });
   item.associate = function (models) {
     this.belongsToMany(models.shoppingList, { through: models.shoppingListItem, as: 'shoppingLists'});

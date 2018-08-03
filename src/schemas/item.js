@@ -7,11 +7,13 @@ type Item {
     uuid: ID!
     name: String
     description: String
+    price: Float
 }
 
 input InputItem {
     name: String
     description: String
+    price: Float
 }
 
 extend type Query {

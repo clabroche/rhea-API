@@ -113,7 +113,6 @@ const resolvers = {
           data.map(({ shoppingListItem }, i)=>{
             data[i].quantity = shoppingListItem.quantity
             data[i].done = shoppingListItem.done
-            data[i].price = shoppingListItem.price
           })
           return data
         })
