@@ -1,6 +1,7 @@
-module.exports = () => [item, base];
+module.exports = () => [item, base, category];
 
 const base = require('./base');
+const category = require('./category');
 
 const item = `
 type Item {
@@ -8,6 +9,7 @@ type Item {
     name: String
     description: String
     price: Float
+    category: Category
 }
 
 input InputItem {

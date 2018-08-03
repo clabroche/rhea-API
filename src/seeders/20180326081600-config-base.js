@@ -2,6 +2,7 @@
 
 const Promise = require('bluebird');
 const models = require('../models');
+const faker = require('faker');
 
 const admin = {
   login: 'johndoe',
@@ -42,6 +43,13 @@ const adminRole = {
   permissions: allPermissions
 };
 
+const items = Array(100).fill('').map(_=>{
+  return {
+    uuid: faker.random.uuid(),
+    name: faker.commerce.productName() + faker.random.uuid().slice(0,3),
+    description: faker.commerce.productName()
+  }
+})
 module.exports = {
   up: () => {
     return models.sequelize.sync().then(() => {
@@ -51,7 +59,11 @@ module.exports = {
         function (role, admin) {
           return admin.setRole(role)
         }
-      );
+      ).then(_=>{
+        return Promise.map(items, item=>{
+          return models.item.create(item)
+        })
+      });
     });
   },
   down: () => {

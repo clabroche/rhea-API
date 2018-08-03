@@ -48,10 +48,12 @@ const resolvers = {
     )
   },
   Item: {
-    // aliments: combineResolvers(
-    //   can('aliments:read'),
-    //   (item) => item.getAliments()
-    // )
+    category: combineResolvers(
+      can('category:read'),
+      (item) => {
+        return models.category.findById(item.categoryUuid)
+      }
+    )
   }
 };
 
