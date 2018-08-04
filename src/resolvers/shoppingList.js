@@ -118,6 +118,14 @@ const resolvers = {
         })
       }
     )
+  },
+  ItemInList: {
+    category: combineResolvers(
+      can('category:read'),
+      (category) => {
+        return models.category.findById(category.categoryUuid)
+      }
+    )
   }
 };
 

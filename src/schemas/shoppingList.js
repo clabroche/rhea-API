@@ -19,6 +19,7 @@ type ItemInList {
     quantity: Int
     done: Int
     price: Float
+    category: Category
 }
 input InputItemInList {
     name: String

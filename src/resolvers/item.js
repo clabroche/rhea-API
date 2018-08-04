@@ -50,8 +50,8 @@ const resolvers = {
   Item: {
     category: combineResolvers(
       can('category:read'),
-      (item) => {
-        return models.category.findById(item.categoryUuid)
+      (category) => {
+        return models.category.findById(category.categoryUuid)
       }
     )
   }
