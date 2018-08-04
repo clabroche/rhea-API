@@ -8,12 +8,14 @@ const resolvers = {
   Query: {
     shoppingListById: combineResolvers(
       can('shoppingList:read'),
-      (_, { uuid }) => models.shoppingList.findById(uuid, {
-        include: {
-          model: models.item,
-          as: 'items'
-        }
-      })
+      (_, { uuid }) => {
+        return models.shoppingList.findById(uuid, {
+          include: {
+            model: models.item,
+            as: 'items'
+          }
+        })
+      }
     ),
     shoppingLists: combineResolvers(
       can('shoppingList:read'),
@@ -23,7 +25,9 @@ const resolvers = {
   Mutation: {
     shoppingListCreate: combineResolvers(
       can('shoppingList:create'),
-      async(_, { input }) => {
+      async(_, { input }, {request}) => {
+        input.accountUuid = request.user.uuid;
+        if (!request.user.uuid) return Promise.reject(new Error('Cannot determine user'))
         const shoppingList = await models.shoppingList.create(input)
         if(!input.itemUuids) return shoppingList
         const Op = models.Sequelize.Op;

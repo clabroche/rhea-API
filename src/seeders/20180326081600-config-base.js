@@ -10,6 +10,12 @@ const admin = {
   familyName: 'DOE',
   password: '$argon2i$v=19$m=4096,t=3,p=1$CxnnerAwIpnDdqI6bAjG9w$keNau2CHhpwjs54E3fxu6t5jR0DwMeHTw4SY/Em0hWc'
 };
+const user = {
+  login: 'robertdoe',
+  givenName: 'John',
+  familyName: 'DOE',
+  password: '$argon2i$v=19$m=4096,t=3,p=1$CxnnerAwIpnDdqI6bAjG9w$keNau2CHhpwjs54E3fxu6t5jR0DwMeHTw4SY/Em0hWc'
+};
 
 const nameModels = [
   { en: 'account', fr: 'un compte' },
@@ -44,7 +50,7 @@ const adminRole = {
   permissions: allPermissions
 };
 
-const items = Array(100).fill('').map(_=>{
+const items = Array(2).fill('').map(_=>{
   return {
     uuid: faker.random.uuid(),
     name: faker.commerce.productName() + faker.random.uuid().slice(0,3),
@@ -57,8 +63,12 @@ module.exports = {
       return Promise.join(
         models.role.create(adminRole, { include: [models.permission] }),
         models.account.create(admin),
-        function (role, admin) {
-          return admin.setRole(role)
+        models.account.create(user),
+        function (role, admin, user) {
+          return Promise.all([
+            admin.setRole(role),
+            user.setRole(role)
+          ])
         }
       ).then(_=>{
         return Promise.map(items, item=>{
