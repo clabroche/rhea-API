@@ -18,6 +18,7 @@ const nameModels = [
   { en: 'shoppingList', fr: 'une liste de course' },
   { en: 'item', fr: 'un element' },
   { en: 'category', fr: 'une catégorie' },
+  { en: 'inventory', fr: 'une catégorie' },
 ];
 
 const actions = [
@@ -63,6 +64,8 @@ module.exports = {
         return Promise.map(items, item=>{
           return models.item.create(item)
         })
+      }).then(_=>{
+        return models.inventory.create()
       });
     });
   },

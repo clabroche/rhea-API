@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
   }, { freezeTableName: true });
   item.associate = function (models) {
     this.belongsToMany(models.shoppingList, { through: models.shoppingListItem, as: 'shoppingLists'});
+    this.belongsToMany(models.inventory, { through: models.inventoryItem, as: 'inventory'});
   };
 
   return item;
