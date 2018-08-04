@@ -11,7 +11,7 @@ const passportJWT = require('passport-jwt');
 const jwt = require('jsonwebtoken');
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
-
+const path = require('path')
 const ExtractJwt = passportJWT.ExtractJwt;
 const jwtOptions = {
   algorithms: ['HS256'],
@@ -96,6 +96,8 @@ if (env === 'development') {
     })
   );
 }
+app.use(express.static(path.resolve(__dirname, '..','public')));
+
 
 app.post('/login',
   passport.authenticate('local', { session: false }),
