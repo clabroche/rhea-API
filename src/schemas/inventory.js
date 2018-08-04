@@ -16,6 +16,11 @@ type ItemInInventory {
     quantity: Int
     category: Category
 }
+input InputItemInInventory {
+    name: String
+    description: String
+    quantity: Int
+}
 
 extend type Query {
     inventory: Inventory
@@ -23,6 +28,6 @@ extend type Query {
 
 extend type Mutation {
     inventoryRemoveItem(itemUuid: ID!): Boolean
-    inventoryAddItem(quantity: Int!): ItemInInventory
+    inventoryAddItem(quantity: Int!, input: InputItemInInventory): ItemInInventory
 }
 `;
