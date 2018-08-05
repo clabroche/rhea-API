@@ -19,7 +19,9 @@ const resolvers = {
     ),
     shoppingLists: combineResolvers(
       can('shoppingList:read'),
-      () => models.shoppingList.findAll()
+      (_, arg, {request}) => models.shoppingList.findAll({
+        where: { accountUuid: request.user.uuid }
+      })
     )
   },
   Mutation: {
