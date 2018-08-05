@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
   account.associate = function (models) {
     this.belongsTo(models.role);
     this.hasMany(models.shoppingList)
+    this.hasMany(models.recipe)
     this.hasMany(models.item)
     this.hasMany(models.category)
     this.hasOne(models.inventory)

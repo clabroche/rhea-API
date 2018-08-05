@@ -25,6 +25,7 @@ const nameModels = [
   { en: 'item', fr: 'un element' },
   { en: 'category', fr: 'une catégorie' },
   { en: 'inventory', fr: 'une catégorie' },
+  { en: 'recipe', fr: 'une recette' },
 ];
 
 const actions = [
