@@ -67,13 +67,21 @@ module.exports = {
           return Promise.join( admin.setRole(role), user.setRole(role), () => [admin, user])
         }
       ).map(async user => {
-          await Promise.map(items, item=>{
-            item.accountUuid = user.uuid
-            return models.item.create(item)
-          })
+        await Promise.map(items, item=>{
+          item.accountUuid = user.uuid
+          return models.item.create(item)
+        })
         await models.inventory.create({
           accountUuid: user.uuid
         })
+        await Promise.map(require('../mock/mock').categories, categoryName => {
+          return models.category.create({
+            accountUuid: user.uuid,
+            name: categoryName
+          })
+        })
+        await 
+         models.category.create()
       })
     });
   },
