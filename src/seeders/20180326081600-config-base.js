@@ -52,31 +52,29 @@ const adminRole = {
 
 const items = Array(2).fill('').map(_=>{
   return {
-    uuid: faker.random.uuid(),
     name: faker.commerce.productName() + faker.random.uuid().slice(0,3),
-    description: faker.commerce.productName()
+    description: faker.commerce.productName(),
   }
 })
+
 module.exports = {
   up: () => {
     return models.sequelize.sync().then(() => {
       return Promise.join(
         models.role.create(adminRole, { include: [models.permission] }),
-        models.account.create(admin),
-        models.account.create(user),
+        models.account.create(admin), models.account.create(user),
         function (role, admin, user) {
-          return Promise.all([
-            admin.setRole(role),
-            user.setRole(role)
-          ])
+          return Promise.join( admin.setRole(role), user.setRole(role), () => [admin, user])
         }
-      ).then(_=>{
-        return Promise.map(items, item=>{
-          return models.item.create(item)
+      ).map(async user => {
+          await Promise.map(items, item=>{
+            item.accountUuid = user.uuid
+            return models.item.create(item)
+          })
+        await models.inventory.create({
+          accountUuid: user.uuid
         })
-      }).then(_=>{
-        return models.inventory.create()
-      });
+      })
     });
   },
   down: () => {

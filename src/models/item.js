@@ -6,10 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true
     },
-    name: {
-      type: DataTypes.STRING,
-      unique: true
-    },
+    name: DataTypes.STRING,
     description: DataTypes.STRING,
     price: {
       type: DataTypes.FLOAT, 

@@ -10,13 +10,17 @@ const resolvers = {
     ),
     categories: combineResolvers(
       can('category:read'),
-      () => models.category.findAll()
+      (_, arg, {request}) => models.category.findAll({
+        where: { accountUuid: request.user.uuid }
+      })
     )
   },
   Mutation: {
     categoryCreate: combineResolvers(
       can('category:create'),
-      async (_, { input }) => {
+      async (_, { input }, {request}) => {
+        if (!request.user.uuid) return Promise.reject(new Error('Cannot determine user'))
+        input.accountUuid = request.user.uuid;
         const existingCategory = (await models.category.findAll({
           where: { name: input.name }
         })).pop();

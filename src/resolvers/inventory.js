@@ -6,22 +6,27 @@ const resolvers = {
   Query: {
     inventory: combineResolvers(
       can('inventory:read'),
-      (_, { uuid }) => models.inventory.findAll()
+      (_, { uuid }, {request}) => models.inventory.find({
+        where: { accountUuid: request.user.uuid }
+      })
     ),
   },
   Mutation: {
     inventoryAddItem: combineResolvers(
       can('inventory:add'),
-      async (_, { listUuid, input }) => {
-        const list = (await models.inventory.findAll()).pop()
+      async (_, { listUuid, input }, {request}) => {
+        const list = (await models.inventory.find({
+          where: { accountUuid: request.user.uuid }
+        }))
         if (!list) return Promise.reject(new Error("Unknown inventory"))
-        let item;
-        item = await models.item.create(input).catch(async err => {
-          let item = await models.item.find({
-            where: { name: input.name },
-          })
-          return item.update(input);
-        })
+        let item = (await models.item.findAll({
+          where: { name: input.name }
+        })).pop();
+        if (!item) {
+          input.accountUuid = request.user.uuid
+          item = await models.item.create(input)
+        }
+        else item.update(input);
         if (!item) return new Error("Can't add item")
         if (!input.quantity) input.quantity = 0
         await list.addItems([item], {
@@ -40,9 +45,9 @@ const resolvers = {
     ),
     inventoryRemoveItem: combineResolvers(
       can('inventory:remove'),
-      async (_, { itemUuid }) => {
+      async (_, { itemUuid }, {request}) => {
         console.log(itemUuid)
-        const list = (await models.inventory.findAll({
+        const list = (await models.inventory.find({
           include: { model: models.item, as: "items" }
         }))[0]
         if (!list) return Promise.reject(new Error("Unknown inventory"))
@@ -55,7 +60,7 @@ const resolvers = {
     items: combineResolvers(
       can('inventory:read'),
       (inventory) => {
-        return inventory[0].getItems( {
+        return inventory.getItems( {
           through: {items: "quantity"}
         }).then(data => {
           data.map(({ inventoryItem }, i)=>{

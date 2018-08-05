@@ -28,8 +28,8 @@ const resolvers = {
     shoppingListCreate: combineResolvers(
       can('shoppingList:create'),
       async(_, { input }, {request}) => {
-        input.accountUuid = request.user.uuid;
         if (!request.user.uuid) return Promise.reject(new Error('Cannot determine user'))
+        input.accountUuid = request.user.uuid;
         const shoppingList = await models.shoppingList.create(input)
         if(!input.itemUuids) return shoppingList
         const Op = models.Sequelize.Op;
@@ -55,16 +55,17 @@ const resolvers = {
     ),
     shoppingListAddItem: combineResolvers(
       can('shoppingList:add'),
-      async (_, { listUuid, input }) => {
+      async (_, { listUuid, input }, {request}) => {
         const list = await models.shoppingList.findById(listUuid)
         if (!list) return Promise.reject(new Error("Unknown shoppingList"))
-        let item;
-        item = await models.item.create(input).catch(async err => {
-          let item = await models.item.find({
-            where: { name: input.name },
-          })
-          return item.update(input);
-        })
+        let item = (await models.item.findAll({
+          where: { name: input.name }
+        })).pop();
+        if (!item) {
+          input.accountUuid = request.user.uuid
+          item = await models.item.create(input)
+        }
+        else item.update(input);
         if (!item) return new Error("Can't add item")
         if (!input.done) input.done = 0
         if (input.done > input.quantity) input.done = 0
