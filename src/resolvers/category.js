@@ -22,7 +22,7 @@ const resolvers = {
         if (!request.user.uuid) return Promise.reject(new Error('Cannot determine user'))
         input.accountUuid = request.user.uuid;
         const existingCategory = (await models.category.findAll({
-          where: { name: input.name }
+          where: { name: input.name, accountUuid: request.user.uuid}
         })).pop();
         if (existingCategory) return existingCategory.setItems(input.itemUuids);
         const category = await models.category.create(input);

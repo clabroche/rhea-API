@@ -8,9 +8,7 @@ const resolvers = {
   Query: {
     itemById: combineResolvers(
       can('item:read'),
-      (_, { uuid }, {request}) => models.item.findAll({
-        where: { accountUuid: request.user.uuid }
-      })
+      (_, { uuid }, {request}) => models.item.findById(uuid)
     ),
     items: combineResolvers(
       can('item:read'),
@@ -22,10 +20,10 @@ const resolvers = {
   Mutation: {
     itemCreate: combineResolvers(
       can('item:create'),
-      async (_, { input }) => {
+      async (_, { input }, {request}) => {
         input.accountUuid = request.user.uuid;
         const existingItem = (await models.item.findAll({
-          where: { name: input.name }
+          where: { name: input.name, accountUuid: request.user.uuid}
         })).pop();
         if (existingItem) return existingItem;
         const item = await models.item.create(input);

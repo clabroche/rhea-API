@@ -59,7 +59,7 @@ const resolvers = {
         const list = await models.shoppingList.findById(listUuid)
         if (!list) return Promise.reject(new Error("Unknown shoppingList"))
         let item = (await models.item.findAll({
-          where: { name: input.name }
+          where: { name: input.name, accountUuid: request.user.uuid}
         })).pop();
         if (!item) {
           input.accountUuid = request.user.uuid
