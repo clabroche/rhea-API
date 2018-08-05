@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     name: DataTypes.STRING,
+    steps: DataTypes.STRING,
     // Timestamps for migrations
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE

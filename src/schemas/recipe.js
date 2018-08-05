@@ -7,6 +7,7 @@ const recipe = `
 type Recipe {
     uuid: ID!
     name: String
+    steps: String
     description: String
     createdAt: GraphQLDateTime
     items: [ItemInRecipe]
@@ -30,6 +31,7 @@ input InputItemInRecipe {
 input InputRecipe {
     name: String
     description: String
+    steps: String
     items: [ID]
 }
 
@@ -41,8 +43,8 @@ extend type Query {
 extend type Mutation {
     recipeCreate(input: InputRecipe!): Recipe
     recipeUpdate(uuid: ID!, input: InputRecipe!): Recipe
-    recipeRemoveItem(listUuid: ID!, itemUuid: ID!): Boolean
-    recipeAddItem(listUuid: ID!, input: InputItemInRecipe!): ItemInRecipe
+    recipeRemoveItem(recipeUuid: ID!, itemUuid: ID!): Boolean
+    recipeAddItem(recipeUuid: ID!, input: InputItemInRecipe!): ItemInRecipe
     recipeDelete(uuid: ID!): Boolean
 }
 `;

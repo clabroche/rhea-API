@@ -46,7 +46,6 @@ const resolvers = {
     inventoryRemoveItem: combineResolvers(
       can('inventory:remove'),
       async (_, { itemUuid }, {request}) => {
-        console.log(itemUuid)
         const list = (await models.inventory.find({
           include: { model: models.item, as: "items" }
         }))[0]

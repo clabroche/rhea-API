@@ -55,9 +55,9 @@ const resolvers = {
     ),
     recipeAddItem: combineResolvers(
       can('recipe:add'),
-      async (_, { listUuid, input }, {request}) => {
-        const list = await models.recipe.findById(listUuid)
-        if (!list) return Promise.reject(new Error("Unknown recipe"))
+      async (_, { recipeUuid, input }, {request}) => {
+        const recipe = await models.recipe.findById(recipeUuid)
+        if (!recipe) return Promise.reject(new Error("Unknown recipe"))
         let item = (await models.item.findAll({
           where: { name: input.name, accountUuid: request.user.uuid}
         })).pop();
@@ -68,7 +68,7 @@ const resolvers = {
         else item.update(input);
         if (!item) return new Error("Can't add item")
         if (!input.quantity) input.quantity = 0
-        await list.addItems([item], {
+        await recipe.addItems([item], {
           through: {
             quantity: input.quantity,
             done: input.done,
@@ -86,15 +86,15 @@ const resolvers = {
     ),
     recipeRemoveItem: combineResolvers(
       can('recipe:remove'),
-      async (_, { listUuid, itemUuid }) => {
-        const list = await models.recipe.findById(listUuid, {
+      async (_, { recipeUuid, itemUuid }) => {
+        const recipe = await models.recipe.findById(recipeUuid, {
           include: {
             model: models.item,
             as: "items"
           }
         })
-        if (!list) return Promise.reject(new Error("Unknown recipe"))
-        list.removeItem(itemUuid)
+        if (!recipe) return Promise.reject(new Error("Unknown recipe"))
+        recipe.removeItem(itemUuid)
         return true
       }
     ),
