@@ -1,0 +1,439 @@
+{
+    "tables": {
+        "inventoryItem": {
+            "tableName": "inventoryItem",
+            "schema": {
+                "quantity": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "inventoryUuid": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "inventory",
+                        "key": "uuid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                },
+                "itemUuid": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "item",
+                        "key": "uuid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                }
+            },
+            "indexes": []
+        },
+        "account": {
+            "tableName": "account",
+            "schema": {
+                "uuid": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "seqType": "Sequelize.UUID"
+                },
+                "login": {
+                    "unique": true,
+                    "seqType": "Sequelize.STRING"
+                },
+                "password": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "givenName": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "familyName": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "avatar": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "roleUuid": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "role",
+                        "key": "uuid"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                }
+            },
+            "indexes": []
+        },
+        "category": {
+            "tableName": "category",
+            "schema": {
+                "uuid": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "seqType": "Sequelize.UUID"
+                },
+                "name": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "accountUuid": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "account",
+                        "key": "uuid"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                }
+            },
+            "indexes": []
+        },
+        "inventory": {
+            "tableName": "inventory",
+            "schema": {
+                "uuid": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "seqType": "Sequelize.UUID"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "accountUuid": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "account",
+                        "key": "uuid"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                }
+            },
+            "indexes": []
+        },
+        "item": {
+            "tableName": "item",
+            "schema": {
+                "uuid": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "seqType": "Sequelize.UUID"
+                },
+                "name": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "description": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "price": {
+                    "defaultValue": {
+                        "value": 0
+                    },
+                    "seqType": "Sequelize.FLOAT"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "accountUuid": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "account",
+                        "key": "uuid"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                },
+                "categoryUuid": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "category",
+                        "key": "uuid"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                }
+            },
+            "indexes": []
+        },
+        "permissions": {
+            "tableName": "permissions",
+            "schema": {
+                "uuid": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "seqType": "Sequelize.UUID"
+                },
+                "name": {
+                    "unique": true,
+                    "seqType": "Sequelize.STRING"
+                },
+                "description": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "recipe": {
+            "tableName": "recipe",
+            "schema": {
+                "uuid": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "seqType": "Sequelize.UUID"
+                },
+                "name": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "img": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "time": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "preparation": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "nbPerson": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "accountUuid": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "account",
+                        "key": "uuid"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                }
+            },
+            "indexes": []
+        },
+        "recipeItem": {
+            "tableName": "recipeItem",
+            "schema": {
+                "quantity": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "recipeUuid": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "recipe",
+                        "key": "uuid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                },
+                "itemUuid": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "item",
+                        "key": "uuid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                }
+            },
+            "indexes": []
+        },
+        "role": {
+            "tableName": "role",
+            "schema": {
+                "uuid": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "seqType": "Sequelize.UUID"
+                },
+                "name": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "shoppingList": {
+            "tableName": "shoppingList",
+            "schema": {
+                "uuid": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "seqType": "Sequelize.UUID"
+                },
+                "name": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "description": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "accountUuid": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "account",
+                        "key": "uuid"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                }
+            },
+            "indexes": []
+        },
+        "shoppingListItem": {
+            "tableName": "shoppingListItem",
+            "schema": {
+                "quantity": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "done": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "itemUuid": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "item",
+                        "key": "uuid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                },
+                "shoppingListUuid": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "shoppingList",
+                        "key": "uuid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                }
+            },
+            "indexes": []
+        },
+        "role_permission": {
+            "tableName": "role_permission",
+            "schema": {
+                "createdAt": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.DATE"
+                },
+                "permissionUuid": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "permissions",
+                        "key": "uuid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                },
+                "roleUuid": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "role",
+                        "key": "uuid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                }
+            },
+            "indexes": []
+        }
+    },
+    "revision": 1
+}

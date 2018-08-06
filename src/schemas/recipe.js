@@ -7,9 +7,12 @@ const recipe = `
 type Recipe {
     uuid: ID!
     name: String
-    steps: String
+    preparation: String
     description: String
     createdAt: GraphQLDateTime
+    img: String
+    nbPerson: Int
+    time: String
     items: [ItemInRecipe]
 }
 
@@ -31,7 +34,10 @@ input InputItemInRecipe {
 input InputRecipe {
     name: String
     description: String
-    steps: String
+    preparation: String
+    img: String
+    nbPerson: Int
+    time: String
     items: [ID]
 }
 
@@ -42,6 +48,7 @@ extend type Query {
 
 extend type Mutation {
     recipeCreate(input: InputRecipe!): Recipe
+    recipeCreateWithMarmiton(url: String!): Recipe
     recipeUpdate(uuid: ID!, input: InputRecipe!): Recipe
     recipeRemoveItem(recipeUuid: ID!, itemUuid: ID!): Boolean
     recipeAddItem(recipeUuid: ID!, input: InputItemInRecipe!): ItemInRecipe

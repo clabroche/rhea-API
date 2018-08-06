@@ -6,6 +6,7 @@
     "apollo-server-express": "^1.4.0",
     "argon2": "^0.19.3",
     "bluebird": "^3.5.1",
+    "cheerio": "^1.0.0-rc.2",
     "compression": "^1.7.3",
     "cors": "^2.8.4",
     "debug": "^3.1.0",
@@ -22,7 +23,10 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
     "sequelize": "^4.38.0",
+    "sequelize-auto-migrations": "^1.0.2",
     "sequelize-cli": "^4.0.0",
     "sqlite3": "^4.0.2"
   },
@@ -42,7 +46,9 @@
     "watch": "nodemon ./bin/www",
     "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text --report-dir=doc/coverage mocha --recursive; rm test.db",
     "sequelize": "sequelize",
-    "coverage": "nyc report --reporter=html --report-dir=doc/coverage"
+    "coverage": "nyc report --reporter=html --report-dir=doc/coverage",
+    "migration": "cd src/ && node ../node_modules/sequelize-auto-migrations/bin/makemigration --name migration",
+    "runmigration": "cd src/ && node ../node_modules/sequelize-auto-migrations/bin/runmigration"
   },
   "semistandard": {
     "env": [
