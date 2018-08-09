@@ -51,12 +51,7 @@ const adminRole = {
   permissions: allPermissions
 };
 
-const items = Array(2).fill('').map(_=>{
-  return {
-    name: faker.commerce.productName() + faker.random.uuid().slice(0,3),
-    description: faker.commerce.productName(),
-  }
-})
+const items = require('../mock/mock.json').items
 
 module.exports = {
   up: () => {

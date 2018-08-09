@@ -169,7 +169,7 @@ function marmiton(url) {
     const items = $('.recipe-ingredients__list__item').toArray().map(($ingredient) => {
       $ingredient = cheerio.load($.html($ingredient))
       return {
-        quantity: $ingredient('.recipe-ingredient-qt').text(),
+        quantity: $ingredient('.recipe-ingredient-qt').text() || 1,
         name: $ingredient('.ingredient').text()
       }
     })
