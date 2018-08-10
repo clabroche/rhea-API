@@ -12,6 +12,7 @@ const jwt = require('jsonwebtoken');
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
 const { makeExecutableSchema } = require('graphql-tools');
 const path = require('path')
+const fse = require('fs-extra')
 const ExtractJwt = passportJWT.ExtractJwt;
 const jwtOptions = {
   algorithms: ['HS256'],
@@ -113,6 +114,11 @@ app.post('/login',
     res.json({ message: 'ok', token });
   }
 );
+
+
+app.get('/version',function (req, res) {
+  return res.json(require('../version.json')) 
+});
 
 app.post('/refresh',
   passport.authenticate('jwt', { session: false }),
