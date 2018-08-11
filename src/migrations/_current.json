@@ -81,6 +81,71 @@
             },
             "indexes": []
         },
+        "calendar": {
+            "tableName": "calendar",
+            "schema": {
+                "uuid": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "seqType": "Sequelize.UUID"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "accountUuid": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "account",
+                        "key": "uuid"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                }
+            },
+            "indexes": []
+        },
+        "calendarRecipe": {
+            "tableName": "calendarRecipe",
+            "schema": {
+                "date": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "calendarUuid": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "calendar",
+                        "key": "uuid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                },
+                "itemUuid": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "item",
+                        "key": "uuid"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.UUID"
+                }
+            },
+            "indexes": []
+        },
         "category": {
             "tableName": "category",
             "schema": {
@@ -435,5 +500,5 @@
             "indexes": []
         }
     },
-    "revision": 2
+    "revision": 3
 }

@@ -35,7 +35,13 @@ const resolvers = {
           return models.role.findById(input.roleUuid)
             .then(role => account.setRole(role))
             .then(() => account);
-        }).then(account => {
+        }).then(async account => {
+          await models.inventory.create({
+            accountUuid: user.uuid
+          })
+          await models.calendar.create({
+            accountUuid: user.uuid
+          })
           return models.account.findById(account.uuid);
         });
       }

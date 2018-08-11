@@ -244,7 +244,7 @@
                     "seqType": "Sequelize.STRING"
                 },
                 "preparation": {
-                    "seqType": "Sequelize.STRING"
+                    "seqType": "Sequelize.TEXT"
                 },
                 "nbPerson": {
                     "seqType": "Sequelize.INTEGER"
@@ -435,5 +435,5 @@
             "indexes": []
         }
     },
-    "revision": 1
+    "revision": 2
 }

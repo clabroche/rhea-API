@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     this.hasMany(models.item)
     this.hasMany(models.category)
     this.hasOne(models.inventory)
+    this.hasOne(models.calendar)
   };
 
   account.prototype.hasPermissionTo = function (permissionToCheck) {
