@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   }, { freezeTableName: true });
   recipe.associate = function (models) {
     this.belongsToMany(models.item, { through: models.recipeItem, as: 'items'});
+
   };
   return recipe;
 };

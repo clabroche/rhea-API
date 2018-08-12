@@ -114,34 +114,28 @@
         "calendarRecipe": {
             "tableName": "calendarRecipe",
             "schema": {
+                "uuid": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "seqType": "Sequelize.UUID"
+                },
                 "date": {
-                    "seqType": "Sequelize.INTEGER"
+                    "seqType": "Sequelize.DATE"
+                },
+                "recipeUuid": {
+                    "seqType": "Sequelize.UUID"
+                },
+                "calendarUuid": {
+                    "seqType": "Sequelize.UUID"
                 },
                 "createdAt": {
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
                     "seqType": "Sequelize.DATE"
-                },
-                "calendarUuid": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "calendar",
-                        "key": "uuid"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "seqType": "Sequelize.UUID"
-                },
-                "itemUuid": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "item",
-                        "key": "uuid"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "seqType": "Sequelize.UUID"
                 }
             },
             "indexes": []
@@ -500,5 +494,5 @@
             "indexes": []
         }
     },
-    "revision": 3
+    "revision": 7
 }

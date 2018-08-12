@@ -46,9 +46,10 @@ const resolvers = {
     inventoryRemoveItem: combineResolvers(
       can('inventory:remove'),
       async (_, { itemUuid }, {request}) => {
-        const list = (await models.inventory.find({
-          include: { model: models.item, as: "items" }
-        }))[0]
+        const list = await models.inventory.find({
+          include: { model: models.item, as: "items" },
+          where: { accountUuid: request.user.uuid },
+        })
         if (!list) return Promise.reject(new Error("Unknown inventory"))
         list.removeItem(itemUuid)
         return true

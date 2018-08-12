@@ -1,7 +1,7 @@
 const { combineResolvers } = require('graphql-resolvers');
 const { can } = require('./helpers');
 const models = require('../models');
-
+const Promise = require('bluebird')
 const resolvers = {
   Query: {
     calendar: combineResolvers(
@@ -15,44 +15,36 @@ const resolvers = {
     calendarAddRecipe: combineResolvers(
       can('calendar:add'),
       async (_, { recipeUuid, date }, {request}) => {
-        const calendar = (await models.calendar.find({
+        const calendar = await models.calendar.find({
           where: { accountUuid: request.user.uuid }
-        }))
-        if (!calendar) return Promise.reject(new Error("Unknown calendar"))
-        console.log(recipeUuid, date)
-        return
-        let item = (await models.item.findAll({
-          where: { name: input.name, accountUuid: request.user.uuid}
-        })).pop();
-        if (!item) {
-          input.accountUuid = request.user.uuid
-          item = await models.item.create(input)
-        }
-        else item.update(input);
-        if (!item) return new Error("Can't add item")
-        if (!input.quantity) input.quantity = 0
-        await calendar.addItems([item], {
-          through: {
-            quantity: input.quantity,
-         }
-        });
-
-        return models.calendarItem.find({
-          where: { itemUuid: item.uuid },
-        }).then(data => {
-          data.uuid = data.itemUuid
-          return data
         })
+        if (!calendar) return Promise.reject(new Error("Unknown calendar"))
+        await models.calendarRecipe.create({
+          calendarUuid: calendar.uuid,
+          recipeUuid: recipeUuid,
+          date
+        })
+        return models.calendar.find({
+          where: { accountUuid: request.user.uuid }
+        })
+
       }
     ),
     calendarRemoveRecipe: combineResolvers(
       can('calendar:remove'),
-      async (_, { itemUuid }, {request}) => {
-        const calendar = (await models.calendar.find({
-          include: { model: models.item, as: "items" }
-        }))[0]
+      async (_, { recipeUuid, date }, {request}) => {
+        const calendar = await models.calendar.find({
+          where: { accountUuid: request.user.uuid }
+        })
         if (!calendar) return Promise.reject(new Error("Unknown calendar"))
-        calendar.removeItem(itemUuid)
+        const recipe = await models.calendarRecipe.find({
+          where: {
+            calendarUuid: calendar.uuid,
+            recipeUuid,
+            date
+          }
+        })
+        console.log(recipe.destroy())
         return true
       }
     ),
@@ -60,14 +52,16 @@ const resolvers = {
   Calendar: {
     recipes: combineResolvers(
       can('calendar:read'),
-      (calendar) => {
-        return calendar.getRecipes( {
-          through: {recipes: "date"}
-        }).then(data => {
-          data.map(({ calendarItem }, i)=>{
-            data[i].date = calendarItem.date
+      async (calendar) => {
+        const calendarRecipes = await models.calendarRecipe.findAll({
+          where: {calendarUuid: calendar.uuid}
+        })
+        if (!calendarRecipes) return null
+        return Promise.map(calendarRecipes, async calendarRecipe=>{
+          return models.recipe.find({where: {uuid: calendarRecipe.recipeUuid}}).then(recipe=> {
+            recipe.date = calendarRecipe.date
+            return recipe
           })
-          return data
         })
       }
     )

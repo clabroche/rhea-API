@@ -37,10 +37,10 @@ const resolvers = {
             .then(() => account);
         }).then(async account => {
           await models.inventory.create({
-            accountUuid: user.uuid
+            accountUuid: account.uuid
           })
           await models.calendar.create({
-            accountUuid: user.uuid
+            accountUuid: account.uuid
           })
           return models.account.findById(account.uuid);
         });

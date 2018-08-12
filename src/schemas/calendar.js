@@ -27,7 +27,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    calendarRemoveRecipe(recipeUuid: ID!): Boolean
+    calendarRemoveRecipe(date: GraphQLDateTime!, recipeUuid: ID!): Boolean
     calendarAddRecipe(date: GraphQLDateTime!, recipeUuid: ID!): RecipeInCalendar
 }
 `;

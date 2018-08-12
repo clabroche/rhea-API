@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
     updatedAt: DataTypes.DATE
   }, { freezeTableName: true });
   calendar.associate = function (models) {
-    this.belongsToMany(models.item, { through: models.calendarRecipe, as: 'recipes'});
   };
   return calendar;
 };
