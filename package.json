@@ -19,7 +19,7 @@
     "graphql-tools": "^3.0.5",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.10",
-    "morgan": "^1.9.0",
+    "morgan": "^1.9.1",
     "mysql2": "^1.5.3",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
